@@ -1,7 +1,6 @@
-package com.gentaliti.item1;
+package com.gentaliti.item1.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,11 +9,17 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Author {
     @Id
+    @GeneratedValue
     private Long id;
     private int age;
     private String name;
+    private String genre;
+    private int rating;
 
     /**
      * 1.- Always cascade from parent to child
@@ -31,6 +36,9 @@ public class Author {
      * 4.- Keep Both Sides of the Association in Sync
      */
     public void addBook(Book book) {
+        if (this.books == null) {
+            this.books = new ArrayList<>();
+        }
         this.books.add(book);
         book.setAuthor(this);
     }
