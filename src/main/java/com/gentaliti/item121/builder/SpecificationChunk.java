@@ -22,6 +22,7 @@ public class SpecificationChunk<T> implements Specification<T> {
             String[] split = condition.getLeftHand().split("\\.");
             String joinName = split[0];
             String leftHand = split[1];
+            // TODO: 10/11/20 Make this cleaner ;-}
             switch (condition.getOperation()) {
                 case EQUAL:
                     root.join(joinName);

@@ -3,8 +3,10 @@ package com.gentaliti.item121.builder;
 import com.gentaliti.item121.builder.type.LogicalOperatorType;
 import com.gentaliti.item121.builder.type.OperationType;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class Condition {
     private final String leftHand;
     private final String rightHand;

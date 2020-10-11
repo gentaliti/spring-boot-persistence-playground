@@ -15,6 +15,10 @@ public class SpecificationBuilder<T> {
         conditions = new ArrayList<>();
     }
 
+    public SpecificationBuilder(List<Condition> conditions) {
+        this.conditions = conditions;
+    }
+
     public SpecificationBuilder<T> with(String leftHand, String rightHand, OperationType operation, LogicalOperatorType operator) {
         conditions.add(new Condition(leftHand, rightHand, operation, operator));
         return this;

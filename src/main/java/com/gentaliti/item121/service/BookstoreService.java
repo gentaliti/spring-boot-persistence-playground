@@ -4,13 +4,9 @@ import com.gentaliti.item1.entity.Author;
 import com.gentaliti.item1.entity.Book;
 import com.gentaliti.item1.repository.AuthorRepository;
 import com.gentaliti.item1.repository.BookRepository;
+import com.gentaliti.item121.builder.Condition;
 import com.gentaliti.item121.builder.SpecificationBuilder;
-import com.gentaliti.item121.builder.type.LogicalOperatorType;
-import com.gentaliti.item121.builder.type.OperationType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import com.gentaliti.item121.builder.SpecificationChunk;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,34 +25,20 @@ public class BookstoreService {
         this.bookRepository = bookRepository;
     }
 
-    public void fetchAuthors() {
-        SpecificationBuilder<Author> specBuilder = new SpecificationBuilder<>();
-
-        Specification<Author> specAuthor = specBuilder
-                .with("age", "40", OperationType.GREATER_THAN, LogicalOperatorType.AND)
-                .with("genre", "Anthology", OperationType.EQUAL, LogicalOperatorType.AND)
-                .with("books.title", "Title 0", OperationType.EQUAL, LogicalOperatorType.END)
-                .build();
-
-        List<Author> authors = authorRepository.findAll(specAuthor);
-
-        System.out.println(authors);
+    public List<Author> fetchAuthors(List<Condition> conditions) {
+        List<Condition> authorsConditions = appendPermissionsConditions(conditions);
+        Specification<Author> specAuthor = new SpecificationBuilder<Author>(authorsConditions).build();
+        return authorRepository.findAll(specAuthor);
     }
 
-    public void fetchBooksPage(int page, int size) {
-        SpecificationBuilder<Book> specBuilder = new SpecificationBuilder<>();
+    private List<Condition> appendPermissionsConditions(List<Condition> conditions) {
+        // Permission based conditions
+        return conditions;
+    }
 
-        Specification<Book> specBook = specBuilder
-                .with("price", "70", OperationType.LESS_THAN, LogicalOperatorType.END)
-                .build();
-
-        Pageable pageable = PageRequest.of(page, size,
-                Sort.by(Sort.Direction.ASC, "title"));
-
-        Page<Book> books = bookRepository.findAll(specBook, pageable);
-
-        System.out.println(books);
-        books.forEach(System.out::println);
+    public List<Book> fetchBooksPage(List<Condition> conditions) {
+        Specification<Book> specBook = new SpecificationBuilder<Book>(conditions).build();
+        return bookRepository.findAll(specBook);
     }
 
     @PostConstruct
