@@ -3,6 +3,7 @@ package com.gentaliti.item1.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,6 +21,8 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private Author author;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Category> categories;
 
     @Override
     public String toString() {

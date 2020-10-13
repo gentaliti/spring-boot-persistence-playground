@@ -1,9 +1,11 @@
 package com.gentaliti.item1.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,6 +22,7 @@ public class Author {
     private String name;
     private String genre;
     private int rating;
+    private Date birthDate;
 
     /**
      * 1.- Always cascade from parent to child

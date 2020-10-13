@@ -19,8 +19,8 @@ public class SpecificationBuilder<T> {
         this.conditions = conditions;
     }
 
-    public SpecificationBuilder<T> with(String leftHand, String rightHand, OperationType operation, LogicalOperatorType operator) {
-        conditions.add(new Condition(leftHand, rightHand, operation, operator));
+    public SpecificationBuilder<T> with(String leftHand, String rightHand, String secondRight, OperationType operation, LogicalOperatorType operator) {
+        conditions.add(new Condition(leftHand, rightHand, secondRight, operation, operator));
         return this;
     }
 
