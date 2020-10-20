@@ -3,8 +3,8 @@ package com.gentaliti.item1.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -29,7 +29,7 @@ public class Author {
      * 6.- Use fetchType=Lazy on both sides of association
      */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Book> books;
+    private Set<Book> books;
 
 
     /**
@@ -37,7 +37,7 @@ public class Author {
      */
     public void addBook(Book book) {
         if (this.books == null) {
-            this.books = new ArrayList<>();
+            this.books = new HashSet<>();
         }
         this.books.add(book);
         book.setAuthor(this);
@@ -50,7 +50,7 @@ public class Author {
 
     public void removeBooks() {
         this.books.forEach(book -> book.setAuthor(null));
-        this.books = new ArrayList<>();
+        this.books = new HashSet<>();
     }
 
     /**

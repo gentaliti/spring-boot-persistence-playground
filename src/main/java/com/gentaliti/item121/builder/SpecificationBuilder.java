@@ -44,4 +44,5 @@ public class SpecificationBuilder<T> {
 
         return finalSpecification;
     }
+
 }
