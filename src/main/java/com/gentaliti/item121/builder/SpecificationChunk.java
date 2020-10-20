@@ -22,9 +22,9 @@ public class SpecificationChunk<T> implements Specification<T> {
             String joinName = condition.getLeftHand().substring(0, condition.getLeftHand().lastIndexOf('.'));
             leftHand = condition.getLeftHand().substring(condition.getLeftHand().lastIndexOf('.') + 1);
             String[] joins = joinName.split("\\.");
-            Join join = PredicateBuilder.getOrCreateJoin(root, joins[0]);
+            Join join = (Join) PredicateBuilder.getOrCreateFetch(root, joins[0]);
             for (int i = 1; i < joins.length; i++) {
-                join = PredicateBuilder.getOrCreateJoin(join, joins[i]);
+                join = (Join) PredicateBuilder.getOrCreateFetch(join, joins[i]);
             }
             conditionRoot = join;
         }

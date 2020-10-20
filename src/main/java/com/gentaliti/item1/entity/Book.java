@@ -1,9 +1,11 @@
 package com.gentaliti.item1.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,9 +22,10 @@ public class Book {
     private int price;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
+    @JsonIgnore
     private Author author;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Category> categories;
+    private Set<Category> categories;
 
     @Override
     public String toString() {

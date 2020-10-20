@@ -7,17 +7,14 @@ import com.gentaliti.item1.repository.AuthorRepository;
 import com.gentaliti.item1.repository.BookRepository;
 import com.gentaliti.item121.builder.Condition;
 import com.gentaliti.item121.builder.SpecificationBuilder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.criteria.*;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 
 @Service
@@ -32,7 +29,10 @@ public class BookstoreService {
     }
 
     public List<Author> fetchAuthors(List<Condition> conditions) {
-        Specification<Author> otherSpecifications = joinTest();
+
+        Specification<Author> otherSpecifications = joinTest("name");
+
+
         List<Condition> authorsConditions = appendPermissionsConditions(conditions);
         Specification<Author> specAuthor = new SpecificationBuilder<Author>(authorsConditions).build();
 
@@ -56,7 +56,7 @@ public class BookstoreService {
 
             Author author = Author.builder()
                     .age(50 + i)
-                    .name("Author " + i)
+                    .name("Author 1")
                     .genre("Anthology")
                     .birthDate(new Date())
                     .build();
@@ -69,8 +69,8 @@ public class BookstoreService {
                     .author(author)
                     .isbn("ISBN-0" + i)
                     .price(60 + i)
-                    .title("Title " + i)
-                    .categories(List.of(category))
+                    .title("Title 1")
+                    .categories(Set.of(category))
                     .build();
 
             author.addBook(book);
@@ -79,13 +79,25 @@ public class BookstoreService {
     }
 
 
-    public static Specification<Author> joinTest() {
-        return new Specification<Author>() {
-            public Predicate toPredicate(Root<Author> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Join userProd = root.join("books");
-                return cb.equal(userProd.get("title"), "Title 1");
-            }
+    public static Specification<Author> titleSpecification() {
+        return (Specification<Author>) (root, query, cb) -> {
+            query.distinct(true); // <--- HERE
+            Join userProd = (Join) root.fetch("books");
+            return cb.equal(userProd.get("title"), "Title 1");
         };
     }
+
+
+    public static Specification<Author> isTrue() {
+        return (Specification<Author>) (root, query, cb) -> {
+            Subquery<Author> subquery = query.subquery(Author.class);
+            Root<Author> subRoot = subquery.from(Author.class);
+            subquery.select(subRoot);
+            subquery.distinct(true);
+
+            return cb.exists(subquery);
+        };
+    }
+
 
 }
