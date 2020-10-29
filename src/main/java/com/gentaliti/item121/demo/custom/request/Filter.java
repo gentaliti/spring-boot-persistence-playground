@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-x
+
 @Getter
 @Setter
 public class Filter {

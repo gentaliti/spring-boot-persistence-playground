@@ -12,6 +12,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FilterArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
@@ -24,8 +25,8 @@ public class FilterArgumentResolver implements HandlerMethodArgumentResolver {
                                          WebDataBinderFactory binderFactory) {
         String filters = webRequest.getParameter("filters");
         String search = webRequest.getParameter("search");
-        Integer page = Integer.parseInt(webRequest.getParameter("page"));
-        Integer pageSize = Integer.parseInt(webRequest.getParameter("pageSize"));
+        Integer page = Integer.parseInt(Objects.requireNonNull(webRequest.getParameter("page")));
+        Integer pageSize = Integer.parseInt(Objects.requireNonNull(webRequest.getParameter("pageSize")));
         Node rootNode = new RSQLParser().parse(filters);
         List<Filter> builtFilters = rootNode.accept(new FilterVisitor<>());
         return new FilterRequest(page, pageSize, search, builtFilters);
